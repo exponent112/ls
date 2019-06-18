@@ -16,9 +16,9 @@ public class ls {
 	static boolean all;
 	static String inP;
 	static boolean help;
-	static boolean p;
 	static boolean re;
 	static boolean f;
+	static boolean m;
 	static boolean A;
 	
 	
@@ -34,12 +34,19 @@ public class ls {
 		options.addOption(Option.builder("help").longOpt("help")
 		        .desc("help")
 		        .build());
+		
 		options.addOption(Option.builder("r").longOpt("reverse")
 		        .desc("reverse sorting")
 		        .build());
+		
+		options.addOption(Option.builder("m")
+		        .desc("list them horizontally.")
+		        .build());
+		
 		options.addOption(Option.builder("f")
 		        .desc("no sorting")
 		        .build());
+		
 		options.addOption(Option.builder("A")
 		        .desc(" \n" + 
 		        		"Prints hidden items except'.' And '..' ")
@@ -94,6 +101,7 @@ public class ls {
 			re = cmd.hasOption("r");
 			f = cmd.hasOption("f");
 			A = cmd.hasOption("A");
+			m = cmd.hasOption("m");
 			
 
 		} catch (Exception e) {
@@ -106,14 +114,26 @@ public class ls {
 	
 	public void Printer () {
 			if(f) {
+				ArrayList<String> f= new ArrayList<String>();
 				File dir = new File(inP);
 				File [] fileList = dir.listFiles();
-				System.out.println(".");
-				System.out.println("..");
+					f.add(".");
+					f.add("..");
 				for(File file : fileList) {
 						String fileName = file.getName();
-							System.out.println(fileName);
+							f.add(fileName);
 					}
+				if(m) {
+					for (int i = 0; i < f.size(); i++) { 
+						System.out.print(f.get(i)); 
+						if(i!=f.size()-1) System.out.print(", ");
+						}
+				}
+				else{
+					for (int i = 0; i < f.size(); i++) { 
+						System.out.println(f.get(i) + " "); 
+						}
+				}
 			}
 			else {
 				ArrayList<String> f= new ArrayList<String>();
@@ -125,14 +145,8 @@ public class ls {
 						String fileName = file.getName();
 							f.add(fileName);
 					}
-					if(p) {
-						f.add("./");
-						f.add("../");
-					}
-					else{
 						f.add(".");
 						f.add("..");
-					}
 				}
 				else if(A){
 					for(File file : fileList) {
@@ -151,9 +165,18 @@ public class ls {
 				Collections.sort(f);
 				if(re)
 					Collections.sort(f, new AscendingString());
-				for (int i = 0; i < f.size(); i++) { 
-					System.out.println(f.get(i) + " "); 
-					}
+				if(m) {
+					for (int i = 0; i < f.size(); i++) { 
+						System.out.print(f.get(i)); 
+						if(i!=f.size()-1) System.out.print(", ");
+						}
+				}
+				else{
+					for (int i = 0; i < f.size(); i++) { 
+						System.out.println(f.get(i) + " "); 
+						}
+				}
+				
 			}
 	}
 	
